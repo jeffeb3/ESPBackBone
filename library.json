@@ -13,6 +13,9 @@
             "name":"ArduinoOTA"
         },
         {
+            "name":"SPI"
+        },
+        {
             "name":"WiFi"
         },
         {
