@@ -19,6 +19,9 @@
             "name":"WiFi"
         },
         {
+            "name":"Update"
+        },
+        {
             "version":"https://github.com/orgua/OneWire"
         },
         {
