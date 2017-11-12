@@ -16,7 +16,6 @@
             "name":"WiFi"
         },
         {
-            "name":"orgua-OneWire",
             "version":"https://github.com/orgua/OneWire"
         },
         {
