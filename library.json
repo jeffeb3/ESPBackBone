@@ -1,0 +1,38 @@
+{
+    "name": "ESP32BackBone",
+    "keywords": "mqtt, iot, esp32",
+    "description": "A library to make projects simple on the esp32",
+    "version": "0.1.0",
+    "examples": "examples/*/*.ino",
+    "frameworks": "arduino",
+    "platforms": [
+        "espressif32"
+    ],
+    "dependencies": [
+        {
+            "name":"ArduinoOTA"
+        },
+        {
+            "name":"WiFi"
+        },
+        {
+            "name":"https://github.com/orgua/OneWire"
+        },
+        {
+            "name":"DallasTemperature"
+        },
+        {
+            "name":"Preferences"
+        },
+        {
+            "name":"NTPClient"
+        },
+        {
+            "name":"PubSubClient"
+        },
+        {
+            "name":"ESP8266_SSD1306"
+        }
+    ]
+
+}
