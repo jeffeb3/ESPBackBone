@@ -13,6 +13,9 @@
             "name":"ArduinoOTA"
         },
         {
+            "name":"WiFi"
+        },
+        {
             "version":"https://github.com/orgua/OneWire"
         },
         {
