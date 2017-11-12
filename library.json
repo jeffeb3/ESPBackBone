@@ -16,7 +16,8 @@
             "name":"WiFi"
         },
         {
-            "name":"https://github.com/orgua/OneWire"
+            "name":"orgua-OneWire",
+            "version":"https://github.com/orgua/OneWire"
         },
         {
             "name":"DallasTemperature"
