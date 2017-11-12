@@ -19,6 +19,9 @@
             "name":"WiFi"
         },
         {
+            "name":"ESPmDNS"
+        },
+        {
             "name":"Update"
         },
         {
