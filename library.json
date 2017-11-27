@@ -9,39 +9,16 @@
         "espressif32"
     ],
     "dependencies": [
-        {
-            "name":"ArduinoOTA"
-        },
-        {
-            "name":"SPI"
-        },
-        {
-            "name":"WiFi"
-        },
-        {
-            "name":"ESPmDNS"
-        },
-        {
-            "name":"Update"
-        },
-        {
-            "version":"https://github.com/orgua/OneWire"
-        },
-        {
-            "name":"DallasTemperature"
-        },
-        {
-            "name":"Preferences"
-        },
-        {
-            "name":"NTPClient"
-        },
-        {
-            "name":"PubSubClient"
-        },
-        {
-            "name":"ESP8266_SSD1306"
-        }
+        { "name":"ArduinoOTA" },
+        { "name":"WiFi", "platforms":"espressif32" },
+        { "name":"ESPmDNS" },
+        { "name":"Update" },
+        { "version":"https://github.com/orgua/OneWire" },
+        { "name":"DallasTemperature" },
+        { "name":"Preferences" },
+        { "name":"NTPClient" },
+        { "name":"PubSubClient" },
+        { "name":"ESP8266_SSD1306" }
     ]
 
 }
