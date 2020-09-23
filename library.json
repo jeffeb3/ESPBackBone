@@ -13,12 +13,12 @@
         { "name":"WiFi", "platforms":"espressif32", "version":"1.0" },
         { "name":"ESPmDNS" },
         { "name":"Update" },
-        { "name":"paulstoffregen/OneWire" },
         { "name":"DallasTemperature" },
         { "name":"Preferences" },
         { "name":"NTPClient" },
         { "name":"PubSubClient" },
-        { "name":"ESP8266_SSD1306" }
+        { "name":"ESP8266_SSD1306" },
+        { "name":"paulstoffregen/OneWire" }
     ]
 
 }
