@@ -10,7 +10,7 @@
     ],
     "dependencies": [
         { "name":"ArduinoOTA" },
-        { "name":"WiFi@1.0" },
+        { "name":"WiFi", "platforms":"espressif32", "version":"1.0" },
         { "name":"ESPmDNS" },
         { "name":"Update" },
         { "name":"paulstoffregen/OneWire" },
