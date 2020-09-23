@@ -10,10 +10,10 @@
     ],
     "dependencies": [
         { "name":"ArduinoOTA" },
-        { "name":"WiFi", "platforms":"espressif32" },
+        { "name":"WiFi@1.0" },
         { "name":"ESPmDNS" },
         { "name":"Update" },
-        { "version":"https://github.com/orgua/OneWire" },
+        { "name":"paulstoffregen/OneWire" },
         { "name":"DallasTemperature" },
         { "name":"Preferences" },
         { "name":"NTPClient" },
