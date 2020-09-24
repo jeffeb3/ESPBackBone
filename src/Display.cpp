@@ -23,6 +23,65 @@ size_t currentPage = 0;
 espbb::DisplayFunc_t alertFunc;
 
 SemaphoreHandle_t display_mutex = NULL;
+#ifdef ESPBB_OLED_DISPLAY
+static auto display = ESPBB_OLED_DISPLAY(ESPBB_OLED_ADDRESS,
+                                         ESPBB_OLED_SDA,
+                                         ESPBB_OLED_SCL);
+void draw()
+{
+    // clear the display
+    display.clear();
+
+    if (internal::alertFunc)
+    {
+        internal::alertFunc(display);
+    }
+    else
+    {
+        if (not internal::idleFuncs.empty())
+        {
+            size_t page = internal::currentPage % internal::idleFuncs.size();
+            internal::idleFuncs[page](display);
+        }
+    }
+
+    // Draw the ip
+    display.setTextAlignment(TEXT_ALIGN_LEFT);
+    display.setFont(ArialMT_Plain_10);
+    if (not espbb::connected())
+    {
+        display.drawString(0, 54, "~m " + espbb::getWiFiIp());
+    }
+    else
+    {
+        display.drawString(0, 54, espbb::getWiFiIp());
+    }
+    if (internal::idleFuncs.size() > 1)
+    {
+        String dots;
+        for (size_t id=0; id<internal::idleFuncs.size(); ++id)
+        {
+            if (id == internal::currentPage)
+            {
+                dots += ":";
+            }
+            else
+            {
+                dots += ".";
+            }
+        }
+        display.drawString(64, 54, dots);
+    }
+
+    // Make a stinky timer.
+    display.setFont(ArialMT_Plain_10);
+    display.setTextAlignment(TEXT_ALIGN_RIGHT);
+    display.drawString(128, 54, String(static_cast<int>(millis() / 10)/100.0));
+
+    // write the buffer to the display
+    display.display();
+}
+#endif
 
 void lock()
 {
@@ -46,7 +105,14 @@ void resetDisplay()
 #endif // LORA
 }
 
-void setDisplay()
+void doDisplay()
+{
+    internal::lock();
+    internal::draw();
+    internal::unlock();
+}
+
+void setDisplay(bool startThread)
 {
     if (NULL == internal::display_mutex)
     {
@@ -62,84 +128,34 @@ void setDisplay()
 
     // Initialising the UI will init the display too.
     resetDisplay();
-    display.init();
-    display.flipScreenVertically();
+    internal::display.init();
+    internal::display.flipScreenVertically();
+    internal::display.setFont(ArialMT_Plain_10);
 
-    static TaskHandle_t display_task = NULL;
-
-    if (NULL != display_task)
+    if (startThread)
     {
-        vTaskDelete(display_task);
-        display_task = NULL;
-    }
+        static TaskHandle_t display_task = NULL;
 
-    xTaskCreate(
-        [](void*)
+        if (NULL != display_task)
         {
-            debugPrintln("[DISP]:\tStarting Display thread");
-            while(1) // forever
+            vTaskDelete(display_task);
+            display_task = NULL;
+        }
+
+        xTaskCreate(
+            [](void*)
             {
-                internal::lock();
-                // clear the display
-                display.clear();
-
-                if (internal::alertFunc)
+                debugPrintln("[DISP]:\tStarting Display thread");
+                while(1) // forever
                 {
-                    internal::alertFunc(display);
-                }
-                else
-                {
-                    if (not internal::idleFuncs.empty())
-                    {
-                        size_t page = internal::currentPage % internal::idleFuncs.size();
-                        internal::idleFuncs[page](display);
-                    }
+                    doDisplay();
+                    vTaskDelay(40/portTICK_PERIOD_MS);
                 }
 
-                // Draw the ip
-                display.setTextAlignment(TEXT_ALIGN_LEFT);
-                display.setFont(ArialMT_Plain_10);
-                if (not espbb::connected())
-                {
-                    display.drawString(0, 54, "~m " + espbb::getWiFiIp());
-                }
-                else
-                {
-                    display.drawString(0, 54, espbb::getWiFiIp());
-                }
-                if (internal::idleFuncs.size() > 1)
-                {
-                    String dots;
-                    for (size_t id=0; id<internal::idleFuncs.size(); ++id)
-                    {
-                        if (id == internal::currentPage)
-                        {
-                            dots += ":";
-                        }
-                        else
-                        {
-                            dots += ".";
-                        }
-                    }
-                    display.drawString(64, 54, dots);
-                }
+                debugPrintln("[DISP]:\tAAH! I should never leave this display thread!");
 
-                // Make a stinky timer.
-                display.setFont(ArialMT_Plain_10);
-                display.setTextAlignment(TEXT_ALIGN_RIGHT);
-                display.drawString(128, 54, String(static_cast<int>(millis() / 10)/100.0));
-
-                // write the buffer to the display
-                display.display();
-
-                internal::unlock();
-                vTaskDelay(40/portTICK_PERIOD_MS);
-            }
-
-            debugPrintln("[DISP]:\tAAH! I should never leave this display thread!");
-
-        }, "Display", 4096, NULL, ESPBB_DISPLAY_TASK_PRIORITY, &display_task);
-
+            }, "Display", 4096, NULL, ESPBB_DISPLAY_TASK_PRIORITY, &display_task);
+    }
 #endif // display
     internal::unlock();
 }

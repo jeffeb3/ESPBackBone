@@ -21,7 +21,9 @@ namespace espbb
 {
 
 //! Initialize the display.
-void setDisplay();
+//! @param startThread. For some reason, the display is all garbled when I run it from a thread. The
+//! workaround is to just set this to false, and call doDisplay().
+void setDisplay(bool startThread = true);
 
 typedef std::function<void(OLEDDisplay&)> DisplayFunc_t;
 
@@ -43,6 +45,9 @@ void setAlert(const DisplayFunc_t& alertFunc);
 
 //! Go back to using the idle or pages.
 void clearAlert();
+
+//! Call this instead of running in a thread
+void doDisplay();
 
 } // namespace
 
